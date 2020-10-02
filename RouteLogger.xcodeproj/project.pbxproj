@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1172CB0F252779D1008936D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB0E252779D1008936D7 /* AppDelegate.swift */; };
-		1172CB11252779D1008936D7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB10252779D1008936D7 /* SceneDelegate.swift */; };
 		1172CB13252779D1008936D7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB12252779D1008936D7 /* ViewController.swift */; };
 		1172CB16252779D1008936D7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1172CB14252779D1008936D7 /* Main.storyboard */; };
 		1172CB18252779D4008936D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1172CB17252779D4008936D7 /* Assets.xcassets */; };
@@ -18,7 +17,6 @@
 /* Begin PBXFileReference section */
 		1172CB0B252779D1008936D7 /* RouteLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouteLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1172CB0E252779D1008936D7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1172CB10252779D1008936D7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1172CB12252779D1008936D7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1172CB15252779D1008936D7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1172CB17252779D4008936D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,7 +55,6 @@
 			isa = PBXGroup;
 			children = (
 				1172CB0E252779D1008936D7 /* AppDelegate.swift */,
-				1172CB10252779D1008936D7 /* SceneDelegate.swift */,
 				1172CB12252779D1008936D7 /* ViewController.swift */,
 				1172CB14252779D1008936D7 /* Main.storyboard */,
 				1172CB17252779D4008936D7 /* Assets.xcassets */,
@@ -139,7 +136,6 @@
 			files = (
 				1172CB13252779D1008936D7 /* ViewController.swift in Sources */,
 				1172CB0F252779D1008936D7 /* AppDelegate.swift in Sources */,
-				1172CB11252779D1008936D7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,7 +292,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hys-enterprise.mobid.RouteLogger";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -315,7 +311,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hys-enterprise.mobid.RouteLogger";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
