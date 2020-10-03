@@ -19,11 +19,13 @@ final class LocationDriver:NSObject {
         let manager = CLLocationManager()
         manager.delegate = self
         manager.allowsBackgroundLocationUpdates = true
+        manager.startUpdatingLocation()
+        manager.desiredAccuracy = 1
         return manager
     }()
     
-    func requestPermission() {
-        LocationDriver.shared.manager.requestAlwaysAuthorization()
+    
+    func requestWhenInUseAuthorization() {
         LocationDriver.shared.manager.requestWhenInUseAuthorization()
     }
     
