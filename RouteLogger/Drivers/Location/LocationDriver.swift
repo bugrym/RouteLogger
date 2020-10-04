@@ -24,7 +24,6 @@ final class LocationDriver:NSObject {
         return manager
     }()
     
-    
     func requestWhenInUseAuthorization() {
         LocationDriver.shared.manager.requestWhenInUseAuthorization()
     }

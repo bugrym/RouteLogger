@@ -15,6 +15,8 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var controlButton:UIButton!
     @IBOutlet private weak var centerButton:UIButton!
     
+    private lazy var routeCoordinates:[Location] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.checkLocationServices()
@@ -68,6 +70,40 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction private func centerTapped() {
         self.zoomToUserLocation()
+    }
+    
+    @IBAction private func startTapped() {
+        guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
+        
+    }
+    
+    private func drawRouteWith(latitude:Double, longitude:Double) {
+        
+        self.routeCoordinates.last.map { (location) in
+            var point = MKMapPoint(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
+            var converted = convertArr(count: <#T##Int#>, data: <#T##UnsafePointer<T>#>)
+            
+            let polyline = MKPolyline(points: point, count: <#T##Int#>)
+        }
+        
+       
+        
+        
+        let geodesic = MKGeodesicPolyline(coordinates: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude), count: <#T##Int#>
+        }
+    
+    func convertArr<T>(count: Int, data: UnsafePointer<T>) -> [T] {
+
+        let buffer = UnsafeBufferPointer(start: data, count: count)
+        return Array(buffer)
+    }
+
+}
+
+extension MKPolyline {
+    convenience init(coordinates:[CLLocationCoordinate2D]) {
+        var tmp = coordinates
+        
     }
 }
 
