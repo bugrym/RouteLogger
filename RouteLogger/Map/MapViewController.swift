@@ -73,37 +73,39 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction private func startTapped() {
-        guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
+//        guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
+//        var coordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
+//        let geodesic = MKGeodesicPolyline(coordinates: &coordinate, count: 1)
+//        self.mapView.addOverlay(geodesic)
+        
+        let point1 = CLLocationCoordinate2DMake(-73.761105, 41.017791)
+            let point2 = CLLocationCoordinate2DMake(-73.760701, 41.019348)
+            let point3 = CLLocationCoordinate2DMake(-73.757201, 41.019267)
+            let point4 = CLLocationCoordinate2DMake(-73.757482, 41.016375)
+            let point5 = CLLocationCoordinate2DMake(-73.761105, 41.017791)
+            
+            let points: [CLLocationCoordinate2D]
+            points = [point1, point2, point3, point4, point5]
+            
+            let geodesic = MKGeodesicPolyline(coordinates: points, count: 5)
+        self.mapView.addOverlay(geodesic)
+        let region = MKCoordinateRegion(center: point1, latitudinalMeters: 200, longitudinalMeters: 200)
+        self.mapView.setRegion(region, animated: true)
         
     }
     
     private func drawRouteWith(latitude:Double, longitude:Double) {
         
-        self.routeCoordinates.last.map { (location) in
-            var point = MKMapPoint(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
-            var converted = convertArr(count: <#T##Int#>, data: <#T##UnsafePointer<T>#>)
-            
-            let polyline = MKPolyline(points: point, count: <#T##Int#>)
+//        self.routeCoordinates.last.map { (location) in
+//            var point = MKMapPoint(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
+//            var converted = convertArr(count: <#T##Int#>, data: <#T##UnsafePointer<T>#>)
+//
+//            let polyline = MKPolyline(points: point, count: <#T##Int#>)
+//        }
+//
+//
+//
+//
+//        let geodesic = MKGeodesicPolyline(coordinates: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude), count: <#T##Int#>
         }
-        
-       
-        
-        
-        let geodesic = MKGeodesicPolyline(coordinates: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude), count: <#T##Int#>
-        }
-    
-    func convertArr<T>(count: Int, data: UnsafePointer<T>) -> [T] {
-
-        let buffer = UnsafeBufferPointer(start: data, count: count)
-        return Array(buffer)
-    }
-
 }
-
-extension MKPolyline {
-    convenience init(coordinates:[CLLocationCoordinate2D]) {
-        var tmp = coordinates
-        
-    }
-}
-

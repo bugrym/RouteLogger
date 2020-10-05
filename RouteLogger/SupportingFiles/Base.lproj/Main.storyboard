@@ -28,6 +28,9 @@
                                 <state key="normal" title="Start">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="startTapped" destination="BYZ-38-t0r" eventType="touchUpInside" id="iPg-kT-Rvg"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sSV-H0-JxI">
                                 <rect key="frame" x="350" y="797" width="32" height="32"/>
