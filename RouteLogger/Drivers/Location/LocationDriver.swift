@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import RealmSwift
 
 final class LocationDriver:NSObject {
     
@@ -14,6 +15,8 @@ final class LocationDriver:NSObject {
     
     private var latitude:Double?
     private var longitude:Double?
+    private var timer:Timer?
+    private var locations:[Location] = []
     
     private lazy var manager:CLLocationManager = {
         let manager = CLLocationManager()
@@ -35,6 +38,35 @@ final class LocationDriver:NSObject {
               let longitude = LocationDriver.shared.longitude else { return nil }
         
         return Location(latitude: latitude, longitude: longitude)
+    }
+    
+    //Log user route every 5 seconds
+    func startJourney() {
+        self.timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
+    }
+    
+    func stopJourney() {
+        self.timer?.invalidate()
+        self.timer = nil
+    }
+    
+    @objc private func saveLocation() {
+        guard let location = LocationDriver.shared.getCurrentLocation() else { return }
+        self.locations.append(location)
+        print("\(location.latitude)\(location.longitude)")
+        
+        //Creating and saving Realm object
+        let currentLocation = LocationModel()
+        currentLocation.latitude = location.latitude
+        currentLocation.longitude = location.longitude
+        currentLocation.date = Date()
+        
+        let realm = try! Realm()
+        
+        try! realm.write {
+            realm.add(currentLocation)
+        }
+        
     }
 }
 

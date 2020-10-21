@@ -16,9 +16,11 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var centerButton:UIButton!
     
     private lazy var routeCoordinates:[Location] = []
+    private var isStarted:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.mapView.delegate = self
         self.checkLocationServices()
         self.setStyles()
         let center = NotificationCenter.default
@@ -73,25 +75,41 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction private func startTapped() {
+        self.isStarted = !isStarted
+        if isStarted {
+            self.controlButton.setTitle("Stop", for: .normal)
+            LocationDriver.shared.startJourney()
+        } else {
+            self.controlButton.setTitle("Start", for: .normal)
+            LocationDriver.shared.stopJourney()
+        }
 //        guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
 //        var coordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
 //        let geodesic = MKGeodesicPolyline(coordinates: &coordinate, count: 1)
 //        self.mapView.addOverlay(geodesic)
         
-        let point1 = CLLocationCoordinate2DMake(-73.761105, 41.017791)
-            let point2 = CLLocationCoordinate2DMake(-73.760701, 41.019348)
-            let point3 = CLLocationCoordinate2DMake(-73.757201, 41.019267)
-            let point4 = CLLocationCoordinate2DMake(-73.757482, 41.016375)
-            let point5 = CLLocationCoordinate2DMake(-73.761105, 41.017791)
-            
-            let points: [CLLocationCoordinate2D]
-            points = [point1, point2, point3, point4, point5]
-            
-            let geodesic = MKGeodesicPolyline(coordinates: points, count: 5)
-        self.mapView.addOverlay(geodesic)
-        let region = MKCoordinateRegion(center: point1, latitudinalMeters: 200, longitudinalMeters: 200)
-        self.mapView.setRegion(region, animated: true)
-        
+//        let point1 = CLLocationCoordinate2D(latitude: 46.471469504801995, longitude: 30.731533337413083)
+//        let point2 = CLLocationCoordinate2D(latitude: 46.471569504802000, longitude: 30.731533337413086)
+//        let point3 = CLLocationCoordinate2D(latitude: 46.471669504802005, longitude: 30.731533337413089)
+//        let point4 = CLLocationCoordinate2D(latitude: 46.471769504802010, longitude: 30.731533337413092)
+//        let point5 = CLLocationCoordinate2D(latitude: 46.471869504802015, longitude: 30.731533337413095)
+//
+//        let points: [CLLocationCoordinate2D]
+//        points = [point1, point2, point3, point4, point5]
+//
+//        let polyline = MKPolyline(coordinates: points, count: points.count)
+//        self.mapView.addOverlay(polyline)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKPolyline {
+            let polylineRender = MKPolylineRenderer(overlay: overlay)
+            polylineRender.strokeColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+            polylineRender.lineWidth = 3.0
+            return polylineRender
+        } else {
+            return MKOverlayRenderer()
+        }
     }
     
     private func drawRouteWith(latitude:Double, longitude:Double) {
