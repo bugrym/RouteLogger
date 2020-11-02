@@ -21,13 +21,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We have to know where you are.</string>
+	<string>We need to know where you are in order to draw routes.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We have to know where you are.</string>
+	<string>We need to know where you are in order to draw routes.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>We have to know where you are.</string>
+	<string>We need to know where you are in order to draw routes.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We have to know where you are.</string>
+	<string>We need to know where you are in order to draw routes.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

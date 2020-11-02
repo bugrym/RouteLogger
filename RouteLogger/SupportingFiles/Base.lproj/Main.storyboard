@@ -3,12 +3,13 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Map View Controller-->
+        <!--RouteLogger-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="RouteLogger" customModuleProvider="target" sceneMemberID="viewController">
@@ -58,16 +59,46 @@
                             <constraint firstItem="kU4-ec-4CO" firstAttribute="width" secondItem="O9l-tY-8b5" secondAttribute="width" multiplier="0.35" id="sKB-Xm-3Og"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="brW-Oh-f3c"/>
+                    <navigationItem key="navigationItem" title="RouteLogger" largeTitleDisplayMode="always" id="brW-Oh-f3c"/>
                     <connections>
                         <outlet property="centerButton" destination="sSV-H0-JxI" id="eFJ-6Q-BrX"/>
                         <outlet property="controlButton" destination="kU4-ec-4CO" id="0M8-1x-KoW"/>
                         <outlet property="mapView" destination="O9l-tY-8b5" id="o5g-RL-zhc"/>
+                        <segue destination="KVk-WX-rtf" kind="show" identifier="toRouteHistoryScreen" id="ajG-Ij-Oy5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1037.68115942029" y="93.75"/>
+        </scene>
+        <!--Route HistoryTVC-->
+        <scene sceneID="qOI-iY-tOn">
+            <objects>
+                <tableViewController id="KVk-WX-rtf" customClass="RouteHistoryTVC" customModule="RouteLogger" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="pj5-DK-feP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="gLY-AJ-JJx">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gLY-AJ-JJx" id="3ZO-aJ-Tot">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="KVk-WX-rtf" id="wJp-1A-8Hl"/>
+                            <outlet property="delegate" destination="KVk-WX-rtf" id="6pr-bl-QeP"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="eXu-eS-rqp"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cJ1-7J-sUq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1943" y="94"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="xZL-Vl-qbl">
@@ -89,6 +120,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="location" width="512" height="512"/>
+        <image name="location" width="64" height="64"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

@@ -48,25 +48,24 @@ final class LocationDriver:NSObject {
     func stopJourney() {
         self.timer?.invalidate()
         self.timer = nil
+        
+        //Creating and saving Realm object
+        let realm = try! Realm()
+        try! realm.write {
+            let model = LocationModel()
+            for location in 0..<self.locations.count {
+                model.latitudes.append(locations[location].latitude)
+                model.longitudes.append(locations[location].longitude)
+                model.dates.append(Date())
+            }
+            realm.add(model)
+        }
+        self.locations = []
     }
     
     @objc private func saveLocation() {
         guard let location = LocationDriver.shared.getCurrentLocation() else { return }
         self.locations.append(location)
-        print("\(location.latitude)\(location.longitude)")
-        
-        //Creating and saving Realm object
-        let currentLocation = LocationModel()
-        currentLocation.latitude = location.latitude
-        currentLocation.longitude = location.longitude
-        currentLocation.date = Date()
-        
-        let realm = try! Realm()
-        
-        try! realm.write {
-            realm.add(currentLocation)
-        }
-        
     }
 }
 
