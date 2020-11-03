@@ -15,9 +15,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var controlButton:UIButton!
     @IBOutlet private weak var centerButton:UIButton!
     
-    private lazy var routeCoordinates:[Location] = []
+    private lazy var routeCoordinates:[CLLocationCoordinate2D] = []
+    private var polyline:MKPolyline {
+        let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
+        return polyline
+    }
     private var isStarted:Bool = false
     private var isAccessAllowed:Bool = false
+    private var timer:Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +49,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     private func zoomToUserLocation() {
         guard let userLocation = LocationDriver.shared.getCurrentLocation() else { return }
-        let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: userLocation.latitude, longitude:  userLocation.longitude), latitudinalMeters: 200, longitudinalMeters: 200)
+        let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: userLocation.latitude, longitude:  userLocation.longitude), latitudinalMeters: 300, longitudinalMeters: 300)
         self.mapView.setRegion(region, animated: true)
     }
     
@@ -94,26 +99,22 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         if isStarted {
             self.controlButton.setTitle("Stop", for: .normal)
             LocationDriver.shared.startJourney()
+            self.timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(drawRoute), userInfo: nil, repeats: true)
         } else {
             self.controlButton.setTitle("Start", for: .normal)
             LocationDriver.shared.stopJourney()
+            self.timer?.invalidate()
+            self.timer = nil
+            self.routeCoordinates = []
+            self.mapView.removeOverlay(self.polyline)
         }
-        //        guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
-        //        var coordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
-        //        let geodesic = MKGeodesicPolyline(coordinates: &coordinate, count: 1)
-        //        self.mapView.addOverlay(geodesic)
-        
-        //        let point1 = CLLocationCoordinate2D(latitude: 46.471469504801995, longitude: 30.731533337413083)
-        //        let point2 = CLLocationCoordinate2D(latitude: 46.471569504802000, longitude: 30.731533337413086)
-        //        let point3 = CLLocationCoordinate2D(latitude: 46.471669504802005, longitude: 30.731533337413089)
-        //        let point4 = CLLocationCoordinate2D(latitude: 46.471769504802010, longitude: 30.731533337413092)
-        //        let point5 = CLLocationCoordinate2D(latitude: 46.471869504802015, longitude: 30.731533337413095)
-        //
-        //        let points: [CLLocationCoordinate2D]
-        //        points = [point1, point2, point3, point4, point5]
-        //
-        //        let polyline = MKPolyline(coordinates: points, count: points.count)
-        //        self.mapView.addOverlay(polyline)
+    }
+    
+    @objc private func drawRoute() {
+        guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
+        let coordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
+        self.routeCoordinates.append(coordinate)
+        self.mapView.addOverlay(self.polyline)
     }
     
     @objc private func historyTapped(_ sender:UIBarButtonItem) {
@@ -129,21 +130,6 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         } else {
             return MKOverlayRenderer()
         }
-    }
-    
-    private func drawRouteWith(latitude:Double, longitude:Double) {
-        
-        //        self.routeCoordinates.last.map { (location) in
-        //            var point = MKMapPoint(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
-        //            var converted = convertArr(count: <#T##Int#>, data: <#T##UnsafePointer<T>#>)
-        //
-        //            let polyline = MKPolyline(points: point, count: <#T##Int#>)
-        //        }
-        //
-        //
-        //
-        //
-        //        let geodesic = MKGeodesicPolyline(coordinates: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude), count: <#T##Int#>
     }
 }
 
