@@ -37,5 +37,4 @@ class RouteHistoryTVC:UITableViewController {
             self.dataSource.append(contentsOf: routes)
         }
     }
-    
 }

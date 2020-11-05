@@ -42,7 +42,7 @@ final class LocationDriver:NSObject {
     
     //Log user route every 5 seconds
     func startJourney() {
-        self.timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
     }
     
     func stopJourney() {

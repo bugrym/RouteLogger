@@ -95,18 +95,21 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction private func startTapped() {
-        self.isStarted = !isStarted
-        if isStarted {
-            self.controlButton.setTitle("Stop", for: .normal)
-            LocationDriver.shared.startJourney()
-            self.timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(drawRoute), userInfo: nil, repeats: true)
-        } else {
-            self.controlButton.setTitle("Start", for: .normal)
-            LocationDriver.shared.stopJourney()
-            self.timer?.invalidate()
-            self.timer = nil
-            self.routeCoordinates = []
-            self.mapView.removeOverlay(self.polyline)
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.isStarted = !strongSelf.isStarted
+            if strongSelf.isStarted {
+                strongSelf.controlButton.setTitle("Stop", for: .normal)
+                LocationDriver.shared.startJourney()
+                strongSelf.timer = Timer.scheduledTimer(timeInterval: 3, target: strongSelf, selector: #selector(strongSelf.drawRoute), userInfo: nil, repeats: true)
+            } else {
+                strongSelf.controlButton.setTitle("Start", for: .normal)
+                LocationDriver.shared.stopJourney()
+                strongSelf.timer?.invalidate()
+                strongSelf.timer = nil
+                strongSelf.routeCoordinates = []
+                strongSelf.mapView.removeOverlays(strongSelf.mapView.overlays)
+            }
         }
     }
     
@@ -124,8 +127,8 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is MKPolyline {
             let polylineRender = MKPolylineRenderer(overlay: overlay)
-            polylineRender.strokeColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
-            polylineRender.lineWidth = 3.0
+            polylineRender.strokeColor = #colorLiteral(red: 0.3307623863, green: 0.8076304793, blue: 0.3619797826, alpha: 1)
+            polylineRender.lineWidth = 5.0
             return polylineRender
         } else {
             return MKOverlayRenderer()
