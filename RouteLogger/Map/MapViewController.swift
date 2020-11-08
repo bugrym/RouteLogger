@@ -20,6 +20,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
         return polyline
     }
+    
     private var isStarted:Bool = false
     private var isAccessAllowed:Bool = false
     private var timer:Timer?
@@ -96,19 +97,22 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction private func startTapped() {
         DispatchQueue.main.async { [weak self] in
-            guard let strongSelf = self else { return }
-            strongSelf.isStarted = !strongSelf.isStarted
-            if strongSelf.isStarted {
-                strongSelf.controlButton.setTitle("Stop", for: .normal)
+            guard let strSelf = self else { return }
+            strSelf.isStarted = !strSelf.isStarted
+            if strSelf.isStarted {
+                strSelf.controlButton.setTitle("Stop", for: .normal)
                 LocationDriver.shared.startJourney()
-                strongSelf.timer = Timer.scheduledTimer(timeInterval: 3, target: strongSelf, selector: #selector(strongSelf.drawRoute), userInfo: nil, repeats: true)
+                strSelf.timer = Timer.scheduledTimer(timeInterval: 3, target: strSelf, selector: #selector(strSelf.drawRoute), userInfo: nil, repeats: true)
             } else {
-                strongSelf.controlButton.setTitle("Start", for: .normal)
+                strSelf.present(AlertFactory.routeSavingAlert(), animated: true, completion: nil)
+                strSelf.controlButton.setTitle("Start", for: .normal)
                 LocationDriver.shared.stopJourney()
-                strongSelf.timer?.invalidate()
-                strongSelf.timer = nil
-                strongSelf.routeCoordinates = []
-                strongSelf.mapView.removeOverlays(strongSelf.mapView.overlays)
+                strSelf.timer?.invalidate()
+                strSelf.timer = nil
+                strSelf.routeCoordinates = []
+                DispatchQueue.main.async {
+                    strSelf.mapView.removeOverlays(strSelf.mapView.overlays)
+                }
             }
         }
     }
@@ -117,7 +121,10 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
         let coordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
         self.routeCoordinates.append(coordinate)
-        self.mapView.addOverlay(self.polyline)
+        DispatchQueue.main.async { [weak self] in
+            guard let strSelf = self else { return }
+            strSelf.mapView.addOverlay(strSelf.polyline)
+        }
     }
     
     @objc private func historyTapped(_ sender:UIBarButtonItem) {

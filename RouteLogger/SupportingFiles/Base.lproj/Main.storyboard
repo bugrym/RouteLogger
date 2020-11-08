@@ -71,7 +71,7 @@
             </objects>
             <point key="canvasLocation" x="1037.68115942029" y="93.75"/>
         </scene>
-        <!--Route HistoryTVC-->
+        <!--History-->
         <scene sceneID="qOI-iY-tOn">
             <objects>
                 <tableViewController id="KVk-WX-rtf" customClass="RouteHistoryTVC" customModule="RouteLogger" customModuleProvider="target" sceneMemberID="viewController">
@@ -94,7 +94,10 @@
                             <outlet property="delegate" destination="KVk-WX-rtf" id="6pr-bl-QeP"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eXu-eS-rqp"/>
+                    <navigationItem key="navigationItem" title="History" id="eXu-eS-rqp"/>
+                    <connections>
+                        <segue destination="ZFB-MV-z57" kind="show" identifier="toRouteMapScreen" id="fe5-mv-ThL"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cJ1-7J-sUq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -117,6 +120,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LoL-UA-Rpy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="127.53623188405798" y="93.75"/>
+        </scene>
+        <!--Route-->
+        <scene sceneID="6MM-Pq-wVA">
+            <objects>
+                <viewController id="ZFB-MV-z57" customClass="RouteMapVC" customModule="RouteLogger" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bKe-9O-eKw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gdm-dH-3gp">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </mapView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Cw4-53-wdG"/>
+                        <constraints>
+                            <constraint firstItem="Gdm-dH-3gp" firstAttribute="leading" secondItem="Cw4-53-wdG" secondAttribute="leading" id="5ct-i3-DwO"/>
+                            <constraint firstItem="Gdm-dH-3gp" firstAttribute="top" secondItem="bKe-9O-eKw" secondAttribute="top" id="6Hm-fF-mus"/>
+                            <constraint firstAttribute="bottom" secondItem="Gdm-dH-3gp" secondAttribute="bottom" id="IpE-HQ-QzX"/>
+                            <constraint firstItem="Cw4-53-wdG" firstAttribute="trailing" secondItem="Gdm-dH-3gp" secondAttribute="trailing" id="xxJ-Cg-WGN"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Route" largeTitleDisplayMode="always" id="kMy-GF-GfA"/>
+                    <connections>
+                        <outlet property="mapView" destination="Gdm-dH-3gp" id="TWC-xf-31p"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oWr-QM-AxU" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2826" y="94"/>
         </scene>
     </scenes>
     <resources>

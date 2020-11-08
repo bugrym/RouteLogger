@@ -18,6 +18,7 @@
 		1172CB1B252779D4008936D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1172CB19252779D4008936D7 /* LaunchScreen.storyboard */; };
 		1172CB2D2527A7C7008936D7 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB2C2527A7C7008936D7 /* LocationModel.swift */; };
 		1172CB3E2527AC14008936D7 /* LocationDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB3D2527AC14008936D7 /* LocationDriver.swift */; };
+		11FEBD1B25572CE900B791E0 /* RouteMapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */; };
 		A194B569F055F642F355AD05 /* Pods_RouteLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4A2CC6253EFD02ED7C443C2 /* Pods_RouteLogger.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		1172CB1C252779D4008936D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1172CB2C2527A7C7008936D7 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		1172CB3D2527AC14008936D7 /* LocationDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDriver.swift; sourceTree = "<group>"; };
+		11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMapVC.swift; sourceTree = "<group>"; };
 		C4A2CC6253EFD02ED7C443C2 /* Pods_RouteLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RouteLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED8F29EA9A2C805EFEE3D7E /* Pods-RouteLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteLogger.debug.xcconfig"; path = "Target Support Files/Pods-RouteLogger/Pods-RouteLogger.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				115398132550807200D9F822 /* RouteHistoryTVC.swift */,
+				11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */,
 			);
 			path = "Route History";
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				1172CB0F252779D1008936D7 /* AppDelegate.swift in Sources */,
 				115398142550807200D9F822 /* RouteHistoryTVC.swift in Sources */,
 				112F122425290F29007A72EF /* AlertFactory.swift in Sources */,
+				11FEBD1B25572CE900B791E0 /* RouteMapVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,11 +12,27 @@ final class AlertFactory {
     
     static func locationRestrictedAlert() -> UIAlertController {
         let alert = UIAlertController(title: "Unable to get your location!", message: "App cannot determines where you are due to restricted permission. Open Settings and turn on Location Services.", preferredStyle: .alert)
-        
         let okButton = UIAlertAction(title: "Ok", style: .default) { _ in
             alert.dismiss(animated: true, completion: nil)
         }
-        
+        alert.addAction(okButton)
+        return alert
+    }
+    
+    static func routeSavingAlert() -> UIAlertController {
+        let alert = UIAlertController(title: nil, message: "Route has successfully saved!", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "Ok", style: .default) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(okButton)
+        return alert
+    }
+    
+    static func centerDeterminationAlert() -> UIAlertController {
+        let alert = UIAlertController(title: nil, message: "Impossible to determine", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "Ok", style: .default) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }
         alert.addAction(okButton)
         return alert
     }

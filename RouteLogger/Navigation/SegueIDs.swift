@@ -18,6 +18,6 @@ enum SegueIdentifier {
     }
     
     enum RouteHistoryScreen:String {
-        case pop
+        case routeMap = "toRouteMapScreen", pop
     }
 }
