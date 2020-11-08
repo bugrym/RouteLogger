@@ -119,8 +119,18 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     @objc private func drawRoute() {
         guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
-        let coordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
-        self.routeCoordinates.append(coordinate)
+        let latestCoordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
+        
+        //TODO: - Fix bend route
+        guard let previousCoordinate = self.routeCoordinates.last else { return }
+        let previousPoint = CLLocation(latitude: previousCoordinate.latitude, longitude: previousCoordinate.longitude)
+        let latestPoint = CLLocation(latitude: latestCoordinate.latitude, longitude: latestCoordinate.longitude)
+        let distance = latestPoint.distance(from: previousPoint)
+        
+        if distance >= (previousPoint.horizontalAccuracy * 0.5) {
+            self.routeCoordinates.append(latestCoordinate)
+        }
+        
         DispatchQueue.main.async { [weak self] in
             guard let strSelf = self else { return }
             strSelf.mapView.addOverlay(strSelf.polyline)
