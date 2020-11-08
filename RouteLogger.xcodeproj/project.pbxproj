@@ -38,6 +38,7 @@
 		1172CB2C2527A7C7008936D7 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		1172CB3D2527AC14008936D7 /* LocationDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDriver.swift; sourceTree = "<group>"; };
 		11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMapVC.swift; sourceTree = "<group>"; };
+		11FEBD1E2558636200B791E0 /* RouteLogger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RouteLogger.entitlements; sourceTree = "<group>"; };
 		C4A2CC6253EFD02ED7C443C2 /* Pods_RouteLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RouteLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED8F29EA9A2C805EFEE3D7E /* Pods-RouteLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteLogger.debug.xcconfig"; path = "Target Support Files/Pods-RouteLogger/Pods-RouteLogger.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,6 +110,7 @@
 		1172CB0D252779D1008936D7 /* RouteLogger */ = {
 			isa = PBXGroup;
 			children = (
+				11FEBD1E2558636200B791E0 /* RouteLogger.entitlements */,
 				1172CB0E252779D1008936D7 /* AppDelegate.swift */,
 				1172CB362527A901008936D7 /* Map */,
 				115398172550807600D9F822 /* Route History */,
@@ -451,6 +453,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RouteLogger/RouteLogger.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V992SDBW25;
 				INFOPLIST_FILE = RouteLogger/SupportingFiles/Info.plist;
@@ -471,6 +474,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RouteLogger/RouteLogger.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V992SDBW25;
 				INFOPLIST_FILE = RouteLogger/SupportingFiles/Info.plist;
