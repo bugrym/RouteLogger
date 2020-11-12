@@ -36,4 +36,19 @@ final class AlertFactory {
         alert.addAction(okButton)
         return alert
     }
+    
+    static func deleteAllRoutes(comletionHandler:@escaping()->Void) -> UIAlertController {
+        let alert = UIAlertController(title: nil, message: "Are you sure you want to delete all routes?", preferredStyle: .alert)
+        let yesButton = UIAlertAction(title: "Yes", style: .default) { _ in
+            comletionHandler()
+        }
+        
+        let noButton = UIAlertAction(title: "No", style: .default) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        
+        alert.addAction(yesButton)
+        alert.addAction(noButton)
+        return alert
+    }
 }

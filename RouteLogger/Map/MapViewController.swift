@@ -88,6 +88,8 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         case .restricted:
             self.controlButton.isEnabled = false
             self.present(AlertFactory.locationRestrictedAlert(), animated: true, completion: nil)
+        @unknown default:
+            fatalError()
         }
     }
     
@@ -101,6 +103,12 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             strSelf.isStarted = !strSelf.isStarted
             if strSelf.isStarted {
                 strSelf.controlButton.setTitle("Stop", for: .normal)
+                strSelf.controlButton.isEnabled = false
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    strSelf.controlButton.isEnabled = true
+                }
+                
                 LocationDriver.shared.startJourney()
                 strSelf.timer = Timer.scheduledTimer(timeInterval: 3, target: strSelf, selector: #selector(strSelf.drawRoute), userInfo: nil, repeats: true)
             } else {
@@ -121,15 +129,17 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         guard let currentLocation = LocationDriver.shared.getCurrentLocation() else { return }
         let latestCoordinate = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
         
-        //TODO: - Fix bend route
-        guard let previousCoordinate = self.routeCoordinates.last else { return }
-        let previousPoint = CLLocation(latitude: previousCoordinate.latitude, longitude: previousCoordinate.longitude)
-        let latestPoint = CLLocation(latitude: latestCoordinate.latitude, longitude: latestCoordinate.longitude)
-        let distance = latestPoint.distance(from: previousPoint)
+        //        //TODO: - Fix bend route
+        //        guard let previousCoordinate = self.routeCoordinates.last else { return }
+        //        let previousPoint = CLLocation(latitude: previousCoordinate.latitude, longitude: previousCoordinate.longitude)
+        //        let latestPoint = CLLocation(latitude: latestCoordinate.latitude, longitude: latestCoordinate.longitude)
+        //        let distance = latestPoint.distance(from: previousPoint)
+        //
+        //        if distance >= (previousPoint.horizontalAccuracy * 0.5) {
+        //            self.routeCoordinates.append(latestCoordinate)
+        //        }
         
-        if distance >= (previousPoint.horizontalAccuracy * 0.5) {
-            self.routeCoordinates.append(latestCoordinate)
-        }
+        self.routeCoordinates.append(latestCoordinate)
         
         DispatchQueue.main.async { [weak self] in
             guard let strSelf = self else { return }

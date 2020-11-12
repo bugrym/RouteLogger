@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class RouteHistoryTVC:UITableViewController {
+final class RouteHistoryTVC:UITableViewController {
     
     private var dataSource:[LocationModel] = []
     
@@ -20,6 +20,18 @@ class RouteHistoryTVC:UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.backButtonTitle = "History"
+        let rightItem = UIBarButtonItem(image: UIImage(named: "trash"), style: .plain, target: self, action: #selector(deleteAllTapped(_:)))
+        navigationItem.rightBarButtonItem = rightItem
+    }
+    
+    @objc private func deleteAllTapped(_ sender:UIBarButtonItem) {
+        DispatchQueue.main.async { [weak self] in
+            guard let strSelf = self else { return }
+            strSelf.present(AlertFactory.deleteAllRoutes {
+                strSelf.deleteAllRecordInDB()
+                strSelf.tableView.reloadData()
+            }, animated: true, completion: nil)
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -34,8 +46,8 @@ class RouteHistoryTVC:UITableViewController {
         let cell = UITableViewCell()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss"
-        cell.textLabel?.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.first ?? Date())
-        cell.imageView?.image = UIImage(named: "mainLogo")
+        cell.textLabel?.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.last!)
+        cell.imageView?.image = UIImage(named: "route")
         return cell
     }
     
@@ -47,14 +59,41 @@ class RouteHistoryTVC:UITableViewController {
         self.performSegue(withIdentifier: SegueIdentifier.RouteHistoryScreen.routeMap.rawValue, sender: self)
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            self.deleteRecordInDB(with: indexPath)
-            self.dataSource.remove(at: indexPath.row)
-            self.tableView.beginUpdates()
-            self.tableView.deleteRows(at: [indexPath], with: .fade)
-            self.tableView.endUpdates()
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .normal, title: "") { [weak self] (_, _, _) in
+            guard let strSelf = self else { return }
+            strSelf.deleteRecordInDB(with: indexPath)
+            strSelf.dataSource.remove(at: indexPath.row)
+            strSelf.tableView.beginUpdates()
+            strSelf.tableView.deleteRows(at: [indexPath], with: .fade)
+            strSelf.tableView.endUpdates()
         }
+        
+        let likeAction = UIContextualAction(style: .normal, title: "") { [weak self] (_, _, _) in
+            guard let strSelf = self else { return }
+            let realm = try! Realm()
+            try! realm.write {
+                guard let object = realm.objects(LocationModel.self).first else { return }
+//                let obj = realm.
+                
+                if !object.isFavorite {
+                    object.isFavorite = true
+                    print("now is favorite")
+                } else {
+                    object.isFavorite = false
+                    print("now is not favorite")
+                }
+                
+            }
+        }
+        
+        deleteAction.image = UIImage(named: "trash-cell")
+        deleteAction.backgroundColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
+        likeAction.image = UIImage(named: "like")
+        likeAction.backgroundColor = #colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)
+        
+        let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, likeAction])
+        return swipeConfig
     }
     
     private func createDataSource() {
@@ -71,6 +110,15 @@ class RouteHistoryTVC:UITableViewController {
         try! realm.write { [weak self] in
             guard let strSelf = self else { return }
             realm.delete(strSelf.dataSource[index.row])
+        }
+    }
+    
+    private func deleteAllRecordInDB() {
+        let realm = try! Realm()
+        try! realm.write { [weak self] in
+            guard let strSelf = self else { return }
+            realm.deleteAll()
+            strSelf.dataSource = []
         }
     }
     
