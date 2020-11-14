@@ -14,6 +14,7 @@ final class RouteHistoryTVC:UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.separatorStyle = .none
         self.createDataSource()
     }
     
@@ -46,8 +47,13 @@ final class RouteHistoryTVC:UITableViewController {
         let cell = UITableViewCell()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss"
-        cell.textLabel?.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.last!)
+        cell.textLabel?.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.first!)
         cell.imageView?.image = UIImage(named: "route")
+        
+        
+        //Returns route time in seconds
+        /*
+         print(self.dataSource[indexPath.row].dates.last!.timeIntervalSince(self.dataSource[indexPath.row].dates.first!))*/
         return cell
     }
     
@@ -69,28 +75,29 @@ final class RouteHistoryTVC:UITableViewController {
             strSelf.tableView.endUpdates()
         }
         
-        let likeAction = UIContextualAction(style: .normal, title: "") { [weak self] (_, _, _) in
+        let likeAction = UIContextualAction(style: .normal, title: "") { [weak self] (view, _, _) in
             guard let strSelf = self else { return }
             let realm = try! Realm()
             try! realm.write {
-                guard let object = realm.objects(LocationModel.self).first else { return }
-//                let obj = realm.
+                let objects = realm.objects(LocationModel.self)
+                let currentObject = objects[indexPath.row]
                 
-                if !object.isFavorite {
-                    object.isFavorite = true
+                if !currentObject.isFavorite {
+                    currentObject.isFavorite = true
+                    view.image = UIImage(named: "like")
                     print("now is favorite")
                 } else {
-                    object.isFavorite = false
+                    currentObject.isFavorite = false
+                    view.image = UIImage(named: "unlike")
                     print("now is not favorite")
                 }
-                
             }
         }
         
         deleteAction.image = UIImage(named: "trash-cell")
-        deleteAction.backgroundColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
-        likeAction.image = UIImage(named: "like")
-        likeAction.backgroundColor = #colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)
+        deleteAction.backgroundColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
+        likeAction.image = UIImage(named: "unlike")
+        likeAction.backgroundColor = .white
         
         let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, likeAction])
         return swipeConfig
@@ -102,6 +109,17 @@ final class RouteHistoryTVC:UITableViewController {
             guard let strSelf = self else { return }
             let routes = realm.objects(LocationModel.self)
             strSelf.dataSource.append(contentsOf: routes)
+        }
+    }
+    
+    private func createFavoriteDataSource() {
+        let realm = try! Realm()
+        try! realm.write { [weak self] in
+            guard let strSelf = self else { return }
+            let routes = realm.objects(LocationModel.self)
+            for route in routes.filter("isFavorite == true") {
+                strSelf.dataSource.append(route)
+            }
         }
     }
     

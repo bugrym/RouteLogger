@@ -27,6 +27,8 @@ final class LocationDriver:NSObject {
         return manager
     }()
     
+    private var locationModel:LocationModel?
+    
     func requestWhenInUseAuthorization() {
         LocationDriver.shared.manager.requestWhenInUseAuthorization()
     }
@@ -40,24 +42,24 @@ final class LocationDriver:NSObject {
         return Location(latitude: latitude, longitude: longitude)
     }
     
-    //Log user route every 5 seconds
+    //Log user route every N seconds
     func startJourney() {
-        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
+        self.locationModel = LocationModel()
+        self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
     }
     
+    /**
+     Method stops route logging session and save route object into Realm DB
+     */
     func stopJourney() {
         self.timer?.invalidate()
         self.timer = nil
         
-        //Creating and saving Realm object
+        //Saving Realm object
         let realm = try! Realm()
-        try! realm.write {
-            let model = LocationModel()
-            for location in 0..<self.locations.count {
-                model.latitudes.append(locations[location].latitude)
-                model.longitudes.append(locations[location].longitude)
-                model.dates.append(Date())
-            }
+        try! realm.write { [weak self] in
+            guard let strSelf = self,
+                  let model = strSelf.locationModel else { return }
             realm.add(model)
         }
         self.locations = []
@@ -66,6 +68,21 @@ final class LocationDriver:NSObject {
     @objc private func saveLocation() {
         guard let location = LocationDriver.shared.getCurrentLocation() else { return }
         self.locations.append(location)
+        self.saveObjectWith(location: location)
+    }
+    
+    /**
+     Method appends new values to the current route object
+     - location: represents route location
+     */
+    private func saveObjectWith(location:Location) {
+        let realm = try! Realm()
+        try! realm.write { [weak self] in
+            guard let strSelf = self else { return }
+            strSelf.locationModel?.latitudes.append(location.latitude)
+            strSelf.locationModel?.longitudes.append(location.longitude)
+            strSelf.locationModel?.dates.append(Date())
+        }
     }
 }
 

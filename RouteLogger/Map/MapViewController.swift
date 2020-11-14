@@ -155,11 +155,15 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         if overlay is MKPolyline {
             let polylineRender = MKPolylineRenderer(overlay: overlay)
             polylineRender.strokeColor = #colorLiteral(red: 0.3307623863, green: 0.8076304793, blue: 0.3619797826, alpha: 1)
-            polylineRender.lineWidth = 5.0
+            polylineRender.lineWidth = 7.0
             return polylineRender
         } else {
             return MKOverlayRenderer()
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        self.zoomToUserLocation()
     }
 }
 
