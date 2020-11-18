@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1128F433256583D20038AA2D /* RouteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1128F432256583D20038AA2D /* RouteCell.swift */; };
 		112F121A2527AF87007A72EF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F12192527AF87007A72EF /* Location.swift */; };
 		112F122425290F29007A72EF /* AlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112F122325290F29007A72EF /* AlertFactory.swift */; };
 		1153980F25507F4D00D9F822 /* SegueIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1153980E25507F4D00D9F822 /* SegueIDs.swift */; };
@@ -18,12 +19,27 @@
 		1172CB1B252779D4008936D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1172CB19252779D4008936D7 /* LaunchScreen.storyboard */; };
 		1172CB2D2527A7C7008936D7 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB2C2527A7C7008936D7 /* LocationModel.swift */; };
 		1172CB3E2527AC14008936D7 /* LocationDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172CB3D2527AC14008936D7 /* LocationDriver.swift */; };
+		11964319256091D80058C26F /* (null) in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11FEBD1B25572CE900B791E0 /* RouteMapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */; };
-		A194B569F055F642F355AD05 /* Pods_RouteLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4A2CC6253EFD02ED7C443C2 /* Pods_RouteLogger.framework */; };
+		299C26CCB8265C6557B80B93 /* Pods_RouteLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF353E8EC2C5752C6334200 /* Pods_RouteLogger.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		11964320256091D90058C26F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				11964319256091D80058C26F /* (null) in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		03C2D3111E04E702DDBC2439 /* Pods-RouteLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteLogger.release.xcconfig"; path = "Target Support Files/Pods-RouteLogger/Pods-RouteLogger.release.xcconfig"; sourceTree = "<group>"; };
+		1128F432256583D20038AA2D /* RouteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCell.swift; sourceTree = "<group>"; };
 		112F12192527AF87007A72EF /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		112F122325290F29007A72EF /* AlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertFactory.swift; sourceTree = "<group>"; };
 		1153980E25507F4D00D9F822 /* SegueIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueIDs.swift; sourceTree = "<group>"; };
@@ -37,10 +53,16 @@
 		1172CB1C252779D4008936D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1172CB2C2527A7C7008936D7 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		1172CB3D2527AC14008936D7 /* LocationDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDriver.swift; sourceTree = "<group>"; };
+		1196430A256091BB0058C26F /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1196430B256091BB0058C26F /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		11964315256091D80058C26F /* realm-sync.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = "realm-sync.xcframework"; path = "Pods/Realm/core/realm-sync.xcframework"; sourceTree = "<group>"; };
+		11964316256091D80058C26F /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		11964317256091D80058C26F /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMapVC.swift; sourceTree = "<group>"; };
 		11FEBD1E2558636200B791E0 /* RouteLogger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RouteLogger.entitlements; sourceTree = "<group>"; };
-		C4A2CC6253EFD02ED7C443C2 /* Pods_RouteLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RouteLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CED8F29EA9A2C805EFEE3D7E /* Pods-RouteLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteLogger.debug.xcconfig"; path = "Target Support Files/Pods-RouteLogger/Pods-RouteLogger.debug.xcconfig"; sourceTree = "<group>"; };
+		7DF353E8EC2C5752C6334200 /* Pods_RouteLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RouteLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF605E9C38FB8A75C38DE44F /* Pods-RouteLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteLogger.release.xcconfig"; path = "Target Support Files/Pods-RouteLogger/Pods-RouteLogger.release.xcconfig"; sourceTree = "<group>"; };
+		EFCB6A19EBA5EE0429B59AB4 /* Pods-RouteLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RouteLogger.debug.xcconfig"; path = "Target Support Files/Pods-RouteLogger/Pods-RouteLogger.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,13 +70,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A194B569F055F642F355AD05 /* Pods_RouteLogger.framework in Frameworks */,
+				299C26CCB8265C6557B80B93 /* Pods_RouteLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1128F434256583D70038AA2D /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1128F432256583D20038AA2D /* RouteCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		112F121D2527B986007A72EF /* Location */ = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +115,7 @@
 			children = (
 				115398132550807200D9F822 /* RouteHistoryTVC.swift */,
 				11FEBD1A25572CE900B791E0 /* RouteMapVC.swift */,
+				1128F434256583D70038AA2D /* Cell */,
 			);
 			path = "Route History";
 			sourceTree = "<group>";
@@ -95,7 +126,7 @@
 				1172CB0D252779D1008936D7 /* RouteLogger */,
 				1172CB0C252779D1008936D7 /* Products */,
 				72041C4E667A2D67EC584DE1 /* Pods */,
-				30FCCBCC5853E828626A69D6 /* Frameworks */,
+				34647F39B2B0D21D42687FAF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -166,10 +197,15 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
-		30FCCBCC5853E828626A69D6 /* Frameworks */ = {
+		34647F39B2B0D21D42687FAF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C4A2CC6253EFD02ED7C443C2 /* Pods_RouteLogger.framework */,
+				11964315256091D80058C26F /* realm-sync.xcframework */,
+				11964316256091D80058C26F /* Realm.framework */,
+				11964317256091D80058C26F /* RealmSwift.framework */,
+				1196430A256091BB0058C26F /* Realm.framework */,
+				1196430B256091BB0058C26F /* RealmSwift.framework */,
+				7DF353E8EC2C5752C6334200 /* Pods_RouteLogger.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -177,8 +213,8 @@
 		72041C4E667A2D67EC584DE1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CED8F29EA9A2C805EFEE3D7E /* Pods-RouteLogger.debug.xcconfig */,
-				03C2D3111E04E702DDBC2439 /* Pods-RouteLogger.release.xcconfig */,
+				EFCB6A19EBA5EE0429B59AB4 /* Pods-RouteLogger.debug.xcconfig */,
+				BF605E9C38FB8A75C38DE44F /* Pods-RouteLogger.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -190,11 +226,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1172CB1F252779D4008936D7 /* Build configuration list for PBXNativeTarget "RouteLogger" */;
 			buildPhases = (
-				0BC745E930ACDC7F82FA3535 /* [CP] Check Pods Manifest.lock */,
+				94E9DEA3276FE79AE413AA4C /* [CP] Check Pods Manifest.lock */,
 				1172CB07252779D1008936D7 /* Sources */,
 				1172CB08252779D1008936D7 /* Frameworks */,
 				1172CB09252779D1008936D7 /* Resources */,
-				5D7F747A5A84DBD9B73B4602 /* [CP] Embed Pods Frameworks */,
+				11964320256091D90058C26F /* Embed Frameworks */,
+				EBC71D0996A1CCD17D33D0CF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -251,7 +288,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0BC745E930ACDC7F82FA3535 /* [CP] Check Pods Manifest.lock */ = {
+		94E9DEA3276FE79AE413AA4C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -273,7 +310,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5D7F747A5A84DBD9B73B4602 /* [CP] Embed Pods Frameworks */ = {
+		EBC71D0996A1CCD17D33D0CF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -306,6 +343,7 @@
 				115398142550807200D9F822 /* RouteHistoryTVC.swift in Sources */,
 				112F122425290F29007A72EF /* AlertFactory.swift in Sources */,
 				11FEBD1B25572CE900B791E0 /* RouteMapVC.swift in Sources */,
+				1128F433256583D20038AA2D /* RouteCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +487,7 @@
 		};
 		1172CB20252779D4008936D7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CED8F29EA9A2C805EFEE3D7E /* Pods-RouteLogger.debug.xcconfig */;
+			baseConfigurationReference = EFCB6A19EBA5EE0429B59AB4 /* Pods-RouteLogger.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -460,6 +498,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hys-enterprise.mobid.RouteLogger";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,7 +509,7 @@
 		};
 		1172CB21252779D4008936D7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 03C2D3111E04E702DDBC2439 /* Pods-RouteLogger.release.xcconfig */;
+			baseConfigurationReference = BF605E9C38FB8A75C38DE44F /* Pods-RouteLogger.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -481,6 +520,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hys-enterprise.mobid.RouteLogger";
 				PRODUCT_NAME = "$(TARGET_NAME)";

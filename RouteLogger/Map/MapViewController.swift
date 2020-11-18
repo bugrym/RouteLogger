@@ -15,6 +15,9 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var controlButton:UIButton!
     @IBOutlet private weak var centerButton:UIButton!
     
+    @IBOutlet private weak var timerLabel:UILabel!
+    @IBOutlet private weak var timerStepper:UIStepper!
+    
     private lazy var routeCoordinates:[CLLocationCoordinate2D] = []
     private var polyline:MKPolyline {
         let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
@@ -32,6 +35,11 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         self.setStyles()
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(checkServices), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        self.timerStepper.minimumValue = 1
+        self.timerStepper.stepValue = 0.25
+        self.timerStepper.maximumValue = 60
+        self.timerLabel.text = "\(self.timerStepper.value)"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,20 +111,30 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             strSelf.isStarted = !strSelf.isStarted
             if strSelf.isStarted {
                 strSelf.controlButton.setTitle("Stop", for: .normal)
-                strSelf.controlButton.isEnabled = false
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                strSelf.controlButton.isEnabled = false
+                strSelf.timerLabel.isHidden = true
+                strSelf.timerStepper.isHidden = true
+                
+                LocationDriver.shared.locationRequestTimeInterval = strSelf.timerStepper.value
+                print(strSelf.timerStepper.value)
+                print(LocationDriver.shared.locationRequestTimeInterval)
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + LocationDriver.shared.locationRequestTimeInterval) {
                     strSelf.controlButton.isEnabled = true
                 }
                 
                 LocationDriver.shared.startJourney()
-                strSelf.timer = Timer.scheduledTimer(timeInterval: 3, target: strSelf, selector: #selector(strSelf.drawRoute), userInfo: nil, repeats: true)
+                strSelf.timer = Timer.scheduledTimer(timeInterval: LocationDriver.shared.locationRequestTimeInterval, target: strSelf, selector: #selector(strSelf.drawRoute), userInfo: nil, repeats: true)
             } else {
                 strSelf.present(AlertFactory.routeSavingAlert(), animated: true, completion: nil)
                 strSelf.controlButton.setTitle("Start", for: .normal)
                 LocationDriver.shared.stopJourney()
                 strSelf.timer?.invalidate()
                 strSelf.timer = nil
+                strSelf.timerLabel.isHidden = false
+                strSelf.timerStepper.isHidden = false
                 strSelf.routeCoordinates = []
                 DispatchQueue.main.async {
                     strSelf.mapView.removeOverlays(strSelf.mapView.overlays)
@@ -149,6 +167,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     @objc private func historyTapped(_ sender:UIBarButtonItem) {
         self.performSegue(withIdentifier: SegueIdentifier.MapViewScreen.routeHistory.rawValue, sender: self)
+    }
+    
+    @IBAction private func toggleStepper(_ sender:UIStepper) {
+        self.timerLabel.text = String(sender.value)
+        LocationDriver.shared.locationRequestTimeInterval = sender.value
+        print("Driver old value: \(LocationDriver.shared.locationRequestTimeInterval)")
+        print("Stepper value: \(sender.value)")
+        print("Driver new value: \(LocationDriver.shared.locationRequestTimeInterval)")
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

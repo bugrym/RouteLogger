@@ -8,14 +8,21 @@
 import UIKit
 import RealmSwift
 
-final class RouteHistoryTVC:UITableViewController {
+final class RouteHistoryTVC:UIViewController {
+    
+    @IBOutlet weak var segmentedControl:UISegmentedControl!
+    @IBOutlet weak var tableView:UITableView!
     
     private var dataSource:[LocationModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.separatorStyle = .none
-        self.createDataSource()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.rowHeight = 70
+        self.segmentedControl.addTarget(self, action: #selector(toggleSegment(_:)), for: .valueChanged)
+        //        self.createDataSource()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,72 +42,23 @@ final class RouteHistoryTVC:UITableViewController {
         }
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss"
-        cell.textLabel?.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.first!)
-        cell.imageView?.image = UIImage(named: "route")
-        
-        
-        //Returns route time in seconds
-        /*
-         print(self.dataSource[indexPath.row].dates.last!.timeIntervalSince(self.dataSource[indexPath.row].dates.first!))*/
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: SegueIdentifier.RouteHistoryScreen.routeMap.rawValue, sender: self)
-    }
-    
-    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .normal, title: "") { [weak self] (_, _, _) in
-            guard let strSelf = self else { return }
-            strSelf.deleteRecordInDB(with: indexPath)
-            strSelf.dataSource.remove(at: indexPath.row)
-            strSelf.tableView.beginUpdates()
-            strSelf.tableView.deleteRows(at: [indexPath], with: .fade)
-            strSelf.tableView.endUpdates()
-        }
-        
-        let likeAction = UIContextualAction(style: .normal, title: "") { [weak self] (view, _, _) in
-            guard let strSelf = self else { return }
-            let realm = try! Realm()
-            try! realm.write {
-                let objects = realm.objects(LocationModel.self)
-                let currentObject = objects[indexPath.row]
-                
-                if !currentObject.isFavorite {
-                    currentObject.isFavorite = true
-                    view.image = UIImage(named: "like")
-                    print("now is favorite")
-                } else {
-                    currentObject.isFavorite = false
-                    view.image = UIImage(named: "unlike")
-                    print("now is not favorite")
-                }
+    @objc private func toggleSegment(_ sender:UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 1:
+            self.dataSource = []
+            self.createFavoriteDataSource()
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.tableView.reloadData()
+            }
+        default:
+            self.dataSource = []
+            self.createDataSource()
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.tableView.reloadData()
             }
         }
-        
-        deleteAction.image = UIImage(named: "trash-cell")
-        deleteAction.backgroundColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
-        likeAction.image = UIImage(named: "unlike")
-        likeAction.backgroundColor = .white
-        
-        let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, likeAction])
-        return swipeConfig
     }
     
     private func createDataSource() {
@@ -146,5 +104,84 @@ final class RouteHistoryTVC:UITableViewController {
                 destination.locationModel = self.dataSource[indexPath.row]
             }
         }
+    }
+}
+
+extension RouteHistoryTVC:UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //        let cell = UITableViewCell()
+        //        let dateFormatter = DateFormatter()
+        //        dateFormatter.dateFormat = "E, d MMM HH:mm:ss"
+        //        cell.textLabel?.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.first!)
+        //        cell.imageView?.image = UIImage(named: "route")
+        
+        //        cell.textLabel?.text = "Route time interval: \(self.dataSource[indexPath.row].timerInterval)"
+        
+        //Returns route time in seconds
+        /*
+         print(self.dataSource[indexPath.row].dates.last!.timeIntervalSince(self.dataSource[indexPath.row].dates.first!))*/
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E, d MMM HH:mm:ss"
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: RouteCell.reuseIdentifier, for: indexPath) as! RouteCell
+        cell.iconImageView.image = UIImage(named: "route")
+        cell.timerTitle.text = "Interval: \(self.dataSource[indexPath.row].timerInterval)"
+        cell.dateTitle.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.first!)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: SegueIdentifier.RouteHistoryScreen.routeMap.rawValue, sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .normal, title: "") { [weak self] (_, _, _) in
+            guard let strSelf = self else { return }
+            strSelf.deleteRecordInDB(with: indexPath)
+            strSelf.dataSource.remove(at: indexPath.row)
+            strSelf.tableView.beginUpdates()
+            strSelf.tableView.deleteRows(at: [indexPath], with: .fade)
+            strSelf.tableView.endUpdates()
+        }
+        
+        let likeAction = UIContextualAction(style: .normal, title: "") { [weak self] (view, _, _) in
+            guard let strSelf = self else { return }
+            let realm = try! Realm()
+            try! realm.write {
+                let objects = realm.objects(LocationModel.self)
+                let currentObject = objects[indexPath.row]
+                
+                if !currentObject.isFavorite {
+                    currentObject.isFavorite = true
+                    view.image = UIImage(named: "like")
+                    print("now is favorite")
+                } else {
+                    currentObject.isFavorite = false
+                    view.image = UIImage(named: "unlike")
+                    print("now is not favorite")
+                }
+            }
+        }
+        
+        deleteAction.image = UIImage(named: "trash-cell")
+        deleteAction.backgroundColor = .red
+        likeAction.image = UIImage(named: "unlike")
+        likeAction.backgroundColor = .white
+        
+        let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, likeAction])
+        return swipeConfig
     }
 }

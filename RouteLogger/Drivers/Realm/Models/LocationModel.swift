@@ -12,5 +12,6 @@ class LocationModel:Object {
     let latitudes = List<Double>()
     let longitudes = List<Double>()
     let dates = List<Date>()
+    @objc dynamic var timerInterval:Double = 1
     @objc dynamic var isFavorite:Bool = false
 }

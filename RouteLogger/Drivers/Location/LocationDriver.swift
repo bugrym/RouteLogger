@@ -18,6 +18,8 @@ final class LocationDriver:NSObject {
     private var timer:Timer?
     private var locations:[Location] = []
     
+    public var locationRequestTimeInterval:Double = 1
+    
     private lazy var manager:CLLocationManager = {
         let manager = CLLocationManager()
         manager.delegate = self
@@ -45,7 +47,7 @@ final class LocationDriver:NSObject {
     //Log user route every N seconds
     func startJourney() {
         self.locationModel = LocationModel()
-        self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: self.locationRequestTimeInterval, target: self, selector: #selector(saveLocation), userInfo: nil, repeats: true)
     }
     
     /**
@@ -82,6 +84,7 @@ final class LocationDriver:NSObject {
             strSelf.locationModel?.latitudes.append(location.latitude)
             strSelf.locationModel?.longitudes.append(location.longitude)
             strSelf.locationModel?.dates.append(Date())
+            strSelf.locationModel?.timerInterval = strSelf.locationRequestTimeInterval
         }
     }
 }
