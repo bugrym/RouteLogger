@@ -3,6 +3,7 @@
 //  RouteLogger
 //
 //  Created by Vladyslav Bugrym on 03.10.2020.
+//  Quality Assurance by Kateryna Galushka
 //
 
 import Foundation

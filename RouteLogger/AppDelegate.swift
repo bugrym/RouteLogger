@@ -3,6 +3,7 @@
 //  RouteLogger
 //
 //  Created by Vladyslav Bugrym on 02.10.2020.
+//  Quality Assurance by Kateryna Galushka
 //
 
 import UIKit

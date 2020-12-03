@@ -3,6 +3,7 @@
 //  RouteLogger
 //
 //  Created by Vladyslav Bugrym on 02.10.2020.
+//  Quality Assurance by Kateryna Galushka
 //
 
 import UIKit
@@ -11,12 +12,13 @@ import CoreLocation
 
 final class MapViewController: UIViewController, MKMapViewDelegate {
     
+    enum State {
+        case active, inactive
+    }
+    
     @IBOutlet private weak var mapView:MKMapView!
     @IBOutlet private weak var controlButton:UIButton!
     @IBOutlet private weak var centerButton:UIButton!
-    
-    @IBOutlet private weak var timerLabel:UILabel!
-    @IBOutlet private weak var timerStepper:UIStepper!
     
     private lazy var routeCoordinates:[CLLocationCoordinate2D] = []
     private var polyline:MKPolyline {
@@ -24,6 +26,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         return polyline
     }
     
+    private var state:State = .inactive
     private var isStarted:Bool = false
     private var isAccessAllowed:Bool = false
     private var timer:Timer?
@@ -35,11 +38,6 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         self.setStyles()
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(checkServices), name: UIApplication.didBecomeActiveNotification, object: nil)
-        
-        self.timerStepper.minimumValue = 1
-        self.timerStepper.stepValue = 0.25
-        self.timerStepper.maximumValue = 60
-        self.timerLabel.text = "\(self.timerStepper.value)"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,17 +80,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         case .authorizedAlways:
             self.controlButton.isEnabled = true
             self.mapView.showsUserLocation = true
-            self.zoomToUserLocation()
             break
         case .authorizedWhenInUse:
             self.controlButton.isEnabled = true
             self.mapView.showsUserLocation = true
-            self.zoomToUserLocation()
         case .notDetermined:
             self.controlButton.isEnabled = true
             LocationDriver.shared.requestWhenInUseAuthorization()
             self.mapView.showsUserLocation = true
-            self.zoomToUserLocation()
         case .restricted:
             self.controlButton.isEnabled = false
             self.present(AlertFactory.locationRestrictedAlert(), animated: true, completion: nil)
@@ -111,16 +106,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             strSelf.isStarted = !strSelf.isStarted
             if strSelf.isStarted {
                 strSelf.controlButton.setTitle("Stop", for: .normal)
-                
                 strSelf.controlButton.isEnabled = false
-                strSelf.timerLabel.isHidden = true
-                strSelf.timerStepper.isHidden = true
-                
-                LocationDriver.shared.locationRequestTimeInterval = strSelf.timerStepper.value
-                print(strSelf.timerStepper.value)
-                print(LocationDriver.shared.locationRequestTimeInterval)
-                
-                
                 DispatchQueue.main.asyncAfter(deadline: .now() + LocationDriver.shared.locationRequestTimeInterval) {
                     strSelf.controlButton.isEnabled = true
                 }
@@ -133,8 +119,6 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
                 LocationDriver.shared.stopJourney()
                 strSelf.timer?.invalidate()
                 strSelf.timer = nil
-                strSelf.timerLabel.isHidden = false
-                strSelf.timerStepper.isHidden = false
                 strSelf.routeCoordinates = []
                 DispatchQueue.main.async {
                     strSelf.mapView.removeOverlays(strSelf.mapView.overlays)
@@ -160,8 +144,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         self.routeCoordinates.append(latestCoordinate)
         
         DispatchQueue.main.async { [weak self] in
-            guard let strSelf = self else { return }
+            guard let strSelf = self,
+                  let center = strSelf.routeCoordinates.first else { return }
             strSelf.mapView.addOverlay(strSelf.polyline)
+            
+            if strSelf.routeCoordinates.first != nil {
+                let circle = MKCircle(center: center, radius: 1)
+                strSelf.mapView.addOverlay(circle)
+            }
         }
     }
     
@@ -170,11 +160,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction private func toggleStepper(_ sender:UIStepper) {
-        self.timerLabel.text = String(sender.value)
         LocationDriver.shared.locationRequestTimeInterval = sender.value
-        print("Driver old value: \(LocationDriver.shared.locationRequestTimeInterval)")
-        print("Stepper value: \(sender.value)")
-        print("Driver new value: \(LocationDriver.shared.locationRequestTimeInterval)")
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -183,14 +169,24 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             polylineRender.strokeColor = #colorLiteral(red: 0.3307623863, green: 0.8076304793, blue: 0.3619797826, alpha: 1)
             polylineRender.lineWidth = 7.0
             return polylineRender
+        } else if overlay is MKCircle {
+            let circleRender = MKCircleRenderer(overlay: overlay)
+            circleRender.strokeColor = .red
+            circleRender.lineWidth = 10.0
+            circleRender.fillColor = .red
+            return circleRender
         } else {
             return MKOverlayRenderer()
         }
     }
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        self.zoomToUserLocation()
+        
     }
+    //
+    //    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    //        self.state = .active
+    //    }
 }
 
 extension MapViewController {

@@ -3,6 +3,7 @@
 //  RouteLogger
 //
 //  Created by Vladyslav Bugrym on 02.11.2020.
+//  Quality Assurance by Kateryna Galushka
 //
 
 import UIKit
@@ -14,6 +15,8 @@ final class RouteHistoryTVC:UIViewController {
     @IBOutlet weak var tableView:UITableView!
     
     private var dataSource:[LocationModel] = []
+    private var favoriteDataSource:[LocationModel] = []
+    private let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +25,29 @@ final class RouteHistoryTVC:UIViewController {
         self.tableView.dataSource = self
         self.tableView.rowHeight = 70
         self.segmentedControl.addTarget(self, action: #selector(toggleSegment(_:)), for: .valueChanged)
-        //        self.createDataSource()
+        self.toggleStates()
+        
+        if #available(iOS 10.0, *) {
+            self.tableView.refreshControl = refreshControl
+            self.refreshControl.tintColor = #colorLiteral(red: 0.4666666667, green: 0.7647058824, blue: 0.2666666667, alpha: 1)
+            self.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        } else {
+            self.tableView.addSubview(refreshControl)
+            self.refreshControl.tintColor = #colorLiteral(red: 0.4666666667, green: 0.7647058824, blue: 0.2666666667, alpha: 1)
+            self.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        }
+        
     }
+    
+    @objc private func refresh() {
+        self.refreshControl.beginRefreshing()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        self.refreshControl.endRefreshing()
+    }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -45,7 +69,26 @@ final class RouteHistoryTVC:UIViewController {
     @objc private func toggleSegment(_ sender:UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 1:
+            self.favoriteDataSource = []
+            self.createFavoriteDataSource()
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.tableView.reloadData()
+            }
+        default:
             self.dataSource = []
+            self.createDataSource()
+            DispatchQueue.main.async { [weak self] in
+                guard let strSelf = self else { return }
+                strSelf.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func toggleStates() {
+        switch self.segmentedControl.selectedSegmentIndex {
+        case 1:
+            self.favoriteDataSource = []
             self.createFavoriteDataSource()
             DispatchQueue.main.async { [weak self] in
                 guard let strSelf = self else { return }
@@ -76,7 +119,8 @@ final class RouteHistoryTVC:UIViewController {
             guard let strSelf = self else { return }
             let routes = realm.objects(LocationModel.self)
             for route in routes.filter("isFavorite == true") {
-                strSelf.dataSource.append(route)
+//                strSelf.dataSource.append(route)
+                strSelf.favoriteDataSource.append(route)
             }
         }
     }
@@ -113,7 +157,13 @@ extension RouteHistoryTVC:UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataSource.count
+        switch self.segmentedControl.selectedSegmentIndex {
+        case 1:
+            return self.favoriteDataSource.count
+        default:
+            return self.dataSource.count
+        }
+//        return self.dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -134,7 +184,8 @@ extension RouteHistoryTVC:UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: RouteCell.reuseIdentifier, for: indexPath) as! RouteCell
         cell.iconImageView.image = UIImage(named: "route")
-        cell.timerTitle.text = "Interval: \(self.dataSource[indexPath.row].timerInterval)"
+//        cell.iconImageView.image = UIImage(named: "route-pin")
+//        cell.iconImageView.image = UIImage(named: "tracking")
         cell.dateTitle.text = dateFormatter.string(from: self.dataSource[indexPath.row].dates.first!)
         return cell
     }
@@ -183,5 +234,12 @@ extension RouteHistoryTVC:UITableViewDelegate, UITableViewDataSource {
         
         let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, likeAction])
         return swipeConfig
+    }
+    
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        DispatchQueue.main.async {
+            guard let indexPath = indexPath else { return }
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
     }
 }

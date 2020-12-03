@@ -3,6 +3,7 @@
 //  RouteLogger
 //
 //  Created by Vladyslav Bugrym on 02.10.2020.
+//  Quality Assurance by Kateryna Galushka
 //
 
 import Foundation
@@ -18,7 +19,7 @@ final class LocationDriver:NSObject {
     private var timer:Timer?
     private var locations:[Location] = []
     
-    public var locationRequestTimeInterval:Double = 1
+    public var locationRequestTimeInterval:Double = 5
     
     private lazy var manager:CLLocationManager = {
         let manager = CLLocationManager()
@@ -84,7 +85,6 @@ final class LocationDriver:NSObject {
             strSelf.locationModel?.latitudes.append(location.latitude)
             strSelf.locationModel?.longitudes.append(location.longitude)
             strSelf.locationModel?.dates.append(Date())
-            strSelf.locationModel?.timerInterval = strSelf.locationRequestTimeInterval
         }
     }
 }
@@ -94,6 +94,9 @@ extension LocationDriver:CLLocationManagerDelegate {
         for location in locations {
             self.latitude = location.coordinate.latitude
             self.longitude = location.coordinate.longitude
+            
+            print("VerticalAccuracy: \(location.verticalAccuracy)")
+            print("HorizontalAccuracy: \(location.horizontalAccuracy)")
         }
     }
     

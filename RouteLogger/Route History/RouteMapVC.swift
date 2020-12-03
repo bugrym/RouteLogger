@@ -3,6 +3,7 @@
 //  RouteLogger
 //
 //  Created by Vladyslav Bugrym on 07.11.2020.
+//  Quality Assurance by Kateryna Galushka
 //
 
 import UIKit
@@ -28,9 +29,18 @@ final class RouteMapVC: UIViewController, MKMapViewDelegate {
     }
     
     private func drawRoute() {
-        DispatchQueue.main.async {
-            self.mapView.addOverlay(self.polyline)
-            self.zoomToStartPoint()
+        DispatchQueue.main.async { [weak self] in
+            guard let strSelf = self,
+                  let startPoint = strSelf.routeCoordinates.first,
+                  let endPoint = strSelf.routeCoordinates.last else { return }
+            strSelf.mapView.addOverlay(strSelf.polyline)
+            strSelf.zoomToStartPoint()
+            
+            if strSelf.routeCoordinates.first != nil {
+                let startCircle = MKCircle(center: startPoint, radius: 1)
+                let endCircle = MKCircle(center: endPoint, radius: 1)
+                strSelf.mapView.addOverlays([startCircle, endCircle])
+            }
         }
     }
     
@@ -53,8 +63,14 @@ final class RouteMapVC: UIViewController, MKMapViewDelegate {
         if overlay is MKPolyline {
             let polylineRender = MKPolylineRenderer(overlay: overlay)
             polylineRender.strokeColor = #colorLiteral(red: 0.3307623863, green: 0.8076304793, blue: 0.3619797826, alpha: 1)
-            polylineRender.lineWidth = 5.0
+            polylineRender.lineWidth = 7.0
             return polylineRender
+        } else if overlay is MKCircle {
+            let circleRender = MKCircleRenderer(overlay: overlay)
+            circleRender.strokeColor = .red
+            circleRender.lineWidth = 10.0
+            circleRender.fillColor = .red
+            return circleRender
         } else {
             return MKOverlayRenderer()
         }
